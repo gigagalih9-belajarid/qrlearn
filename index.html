@@ -1,0 +1,449 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>QR Learning by Education Media</title>
+    <link rel="stylesheet" href="style.css">
+    <script src="https://unpkg.com/html5-qrcode" type="text/javascript"></script>
+</head>
+<body>
+    <div class="app-container">
+        <!-- HALAMAN UTAMA (Landing Page) -->
+        <div id="landingPage" class="page active">
+            <div class="container">
+                <header class="landing-header">
+                    <div class="landing-hero">
+                        <h1 class="hero-title">QR Learning by Education Media</h1>
+                        <p class="hero-subtitle">Platform pembelajaran interaktif menggunakan QR Code dengan teknologi canggih</p>
+                        <div class="hero-description">
+                            <p>Selesaikan serangkaian langkah dengan memindai QR Code yang tepat, tangkap gambar selama pembelajaran, dan dapatkan feedback komprehensif!</p>
+                        </div>
+                    </div>
+                    <div class="menu-options">
+                        <button id="startLearningBtn" class="btn btn--primary btn--lg menu-btn">
+                            <span class="btn-icon">📚</span>
+                            <span class="btn-text">Mulai Belajar</span>
+                        </button>
+                        <button id="adminDashboardBtn" class="btn btn--secondary btn--lg menu-btn">
+                            <span class="btn-icon">⚙️</span>
+                            <span class="btn-text">Dashboard Admin</span>
+                        </button>
+                        <button id="resultsPageBtn" class="btn btn--outline btn--lg menu-btn">
+                            <span class="btn-icon">📊</span>
+                            <span class="btn-text">Lihat Hasil</span>
+                        </button>
+                    </div>
+                </header>
+            </div>
+        </div>
+
+        <!-- HALAMAN PEMBELAJARAN -->
+        <div id="learningPage" class="page">
+            <div class="container">
+                <!-- Navigation -->
+                <nav class="page-nav">
+                    <button id="backToHomeBtn" class="btn btn--outline btn--sm">
+                        ← Kembali ke Beranda
+                    </button>
+                    <h2 class="page-title">Pembelajaran QR</h2>
+                    <div class="nav-info">
+                        <span id="sessionTimer" class="timer-display">00:00</span>
+                    </div>
+                </nav>
+
+                <!-- Progress Section -->
+                <div class="progress-section">
+                    <div class="progress-info">
+                        <span id="progressText">Langkah 1 dari 3</span>
+                        <div class="progress-stats">
+                            <span id="progressPercentage">0%</span>
+                            <span id="scoreDisplay">Skor: 0</span>
+                        </div>
+                    </div>
+                    <div class="progress-bar">
+                        <div class="progress-fill" id="progressFill"></div>
+                    </div>
+                </div>
+
+                <!-- Question Section -->
+                <div class="question-section card">
+                    <div class="card__body">
+                        <div class="question-header">
+                            <h3 class="question-number">Langkah <span id="currentStep">1</span></h3>
+                            <h2 id="questionText" class="question-title">Scan QR code yang berisi kata 'START'</h2>
+                        </div>
+                        <p id="questionDescription" class="question-description">
+                            Langkah pertama: Temukan dan scan QR code yang berisi kata START untuk memulai pembelajaran
+                        </p>
+                        <div id="hintsSection" class="hints-section hidden">
+                            <h4>💡 Petunjuk:</h4>
+                            <ul id="hintsList"></ul>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Enhanced Camera Control Section -->
+                <div class="camera-control-section">
+                    <div class="camera-info">
+                        <div class="camera-status">
+                            <span class="status-label">Status Kamera:</span>
+                            <span id="cameraStatus" class="status-indicator inactive">
+                                <span class="status-dot"></span>
+                                Kamera Mati
+                            </span>
+                        </div>
+                        <div id="cameraSelection" class="camera-selection hidden">
+                            <label for="cameraSelect" class="form-label">Pilih Kamera:</label>
+                            <select id="cameraSelect" class="form-control">
+                                <option value="">Memuat kamera...</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="camera-controls">
+                        <button id="turnOnCameraBtn" class="btn btn--primary btn--lg camera-btn">
+                            <span class="btn-icon">📷</span>
+                            Nyalakan Kamera
+                        </button>
+                        <button id="turnOffCameraBtn" class="btn btn--secondary btn--lg camera-btn hidden">
+                            <span class="btn-icon">📷</span>
+                            Matikan Kamera
+                        </button>
+                        <button id="captureImageBtn" class="btn btn--outline btn--lg camera-btn hidden">
+                            <span class="btn-icon">📸</span>
+                            Tangkap Gambar
+                        </button>
+                    </div>
+                </div>
+
+                <!-- QR Scanner Section -->
+                <div id="scannerSection" class="scanner-section card hidden">
+                    <div class="card__body">
+                        <div class="scanner-header">
+                            <h3>Scanner QR Code</h3>
+                            <p class="scan-instruction">Arahkan kamera ke QR code dan pastikan QR code terlihat jelas</p>
+                        </div>
+                        <div class="scanner-container">
+                            <div id="qr-reader" class="qr-reader"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Captured Image Preview -->
+                <div id="imagePreviewSection" class="image-preview-section card hidden">
+                    <div class="card__body">
+                        <h3>Gambar yang Ditangkap</h3>
+                        <div class="image-preview-container">
+                            <img id="capturedImage" alt="Captured image" class="captured-image">
+                            <div class="image-actions">
+                                <button id="downloadImageBtn" class="btn btn--outline btn--sm">
+                                    💾 Unduh Gambar
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Feedback Section -->
+                <div id="feedbackSection" class="feedback-section card hidden">
+                    <div class="card__body">
+                        <div class="feedback-content">
+                            <div class="feedback-icon" id="feedbackIcon">ℹ️</div>
+                            <h3 id="feedbackTitle">Feedback</h3>
+                            <div id="feedbackMessage" class="feedback-message"></div>
+                            <div id="scannedValue" class="scanned-value hidden">
+                                <strong>QR Code yang dibaca: </strong>
+                                <code id="scannedText"></code>
+                            </div>
+                            <div id="correctAnswer" class="correct-answer hidden">
+                                <strong>Jawaban yang benar: </strong>
+                                <code id="correctAnswerText"></code>
+                            </div>
+                            <div id="pointsEarned" class="points-earned hidden">
+                                <strong>Poin yang diperoleh: </strong>
+                                <span id="pointsValue">+10</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Action Buttons -->
+                <div class="action-section">
+                    <button id="nextStepBtn" class="btn btn--primary btn--lg hidden">
+                        Lanjut ke Langkah Berikutnya
+                    </button>
+                    <button id="showHintsBtn" class="btn btn--outline">
+                        💡 Tampilkan Petunjuk
+                    </button>
+                    <button id="restartLearningBtn" class="btn btn--outline">
+                        🔄 Mulai Ulang Pembelajaran
+                    </button>
+                </div>
+
+                <!-- Enhanced Completion Section -->
+                <div id="completionSection" class="completion-section card hidden">
+                    <div class="card__body text-center">
+                        <div class="completion-animation">
+                            <div class="completion-icon">🏆</div>
+                            <h2 class="completion-title">Selamat!</h2>
+                            <p class="completion-message">Anda telah berhasil menyelesaikan semua langkah pembelajaran QR Code!</p>
+                            <div class="completion-stats">
+                                <div class="stat-item">
+                                    <span class="stat-number" id="totalSteps">3</span>
+                                    <span class="stat-label">Langkah Selesai</span>
+                                </div>
+                                <div class="stat-item">
+                                    <span class="stat-number" id="totalScore">0</span>
+                                    <span class="stat-label">Total Skor</span>
+                                </div>
+                                <div class="stat-item">
+                                    <span class="stat-number" id="completionTime">00:00</span>
+                                    <span class="stat-label">Waktu Selesai</span>
+                                </div>
+                                <div class="stat-item">
+                                    <span class="stat-number" id="capturedCount">0</span>
+                                    <span class="stat-label">Gambar Ditangkap</span>
+                                </div>
+                            </div>
+                            <div id="achievementsSection" class="achievements-section">
+                                <h3>🏅 Pencapaian</h3>
+                                <div id="achievementsList" class="achievements-list"></div>
+                            </div>
+                            <div class="completion-actions">
+                                <button id="playAgainBtn" class="btn btn--primary btn--lg">
+                                    🔄 Main Lagi
+                                </button>
+                                <button id="viewResultsBtn" class="btn btn--secondary btn--lg">
+                                    📊 Lihat Hasil Detail
+                                </button>
+                                <button id="backToHomeFromCompletionBtn" class="btn btn--outline">
+                                    🏠 Kembali ke Beranda
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- HALAMAN HASIL -->
+        <div id="resultsPage" class="page">
+            <div class="container">
+                <nav class="page-nav">
+                    <button id="backToHomeFromResultsBtn" class="btn btn--outline btn--sm">
+                        ← Kembali ke Beranda
+                    </button>
+                    <h2 class="page-title">Hasil Pembelajaran</h2>
+                </nav>
+
+                <!-- Statistics Section -->
+                <div class="results-stats card">
+                    <div class="card__body">
+                        <h3>📊 Statistik Pembelajaran</h3>
+                        <div class="stats-grid">
+                            <div class="stat-card">
+                                <div class="stat-icon">🎯</div>
+                                <div class="stat-value" id="totalCompletions">0</div>
+                                <div class="stat-name">Total Selesai</div>
+                            </div>
+                            <div class="stat-card">
+                                <div class="stat-icon">⭐</div>
+                                <div class="stat-value" id="bestScore">0</div>
+                                <div class="stat-name">Skor Terbaik</div>
+                            </div>
+                            <div class="stat-card">
+                                <div class="stat-icon">⚡</div>
+                                <div class="stat-value" id="bestTime">--:--</div>
+                                <div class="stat-name">Waktu Terbaik</div>
+                            </div>
+                            <div class="stat-card">
+                                <div class="stat-icon">📸</div>
+                                <div class="stat-value" id="totalImages">0</div>
+                                <div class="stat-name">Gambar Tertangkap</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Image Gallery -->
+                <div class="image-gallery card">
+                    <div class="card__body">
+                        <h3>🖼️ Galeri Gambar</h3>
+                        <div id="imageGallery" class="gallery-grid">
+                            <div class="no-images">
+                                <p>Belum ada gambar yang ditangkap.</p>
+                                <p>Mulai pembelajaran untuk menangkap gambar!</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Learning History -->
+                <div class="learning-history card">
+                    <div class="card__body">
+                        <h3>📚 Riwayat Pembelajaran</h3>
+                        <div id="learningHistory" class="history-list">
+                            <div class="no-history">
+                                <p>Belum ada riwayat pembelajaran.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- HALAMAN ADMIN DASHBOARD -->
+        <div id="adminPage" class="page">
+            <div class="container">
+                <!-- Navigation -->
+                <nav class="page-nav">
+                    <button id="backToHomeFromAdminBtn" class="btn btn--outline btn--sm">
+                        ← Kembali ke Beranda
+                    </button>
+                    <h2 class="page-title">Dashboard Admin</h2>
+                    <div class="admin-actions">
+                        <button id="exportDataBtn" class="btn btn--outline btn--sm">
+                            💾 Export Data
+                        </button>
+                        <button id="testQuestionsBtn" class="btn btn--primary btn--sm">
+                            🧪 Test Soal
+                        </button>
+                    </div>
+                </nav>
+
+                <!-- Enhanced Add Question Form -->
+                <div class="admin-section card">
+                    <div class="card__body">
+                        <h3 class="section-title">Tambah Soal Baru</h3>
+                        <form id="addQuestionForm" class="question-form">
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <label class="form-label" for="newQuestionText">Pertanyaan/Soal *</label>
+                                    <textarea id="newQuestionText" class="form-control" rows="2" placeholder="Contoh: Scan QR code yang berisi kata 'HELLO'" required></textarea>
+                                </div>
+                                <div class="form-group">
+                                    <label class="form-label" for="newCorrectAnswer">Jawaban QR yang Benar *</label>
+                                    <input type="text" id="newCorrectAnswer" class="form-control" placeholder="Contoh: HELLO" required>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label" for="newQuestionDescription">Deskripsi Tambahan</label>
+                                <textarea id="newQuestionDescription" class="form-control" rows="2" placeholder="Deskripsi detail untuk membantu user memahami langkah ini"></textarea>
+                            </div>
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <label class="form-label" for="newQuestionHints">Petunjuk (satu per baris)</label>
+                                    <textarea id="newQuestionHints" class="form-control" rows="3" placeholder="Pastikan QR code terlihat jelas&#10;Kata harus dalam huruf kapital&#10;Coba dari jarak yang berbeda"></textarea>
+                                </div>
+                                <div class="form-group">
+                                    <label class="form-label" for="newQuestionPoints">Poin (1-100)</label>
+                                    <input type="number" id="newQuestionPoints" class="form-control" min="1" max="100" value="10">
+                                </div>
+                            </div>
+                            <button type="submit" class="btn btn--primary">
+                                ➕ Tambah Soal
+                            </button>
+                        </form>
+                    </div>
+                </div>
+
+                <!-- Enhanced Questions List -->
+                <div class="admin-section card">
+                    <div class="card__body">
+                        <div class="section-header">
+                            <h3 class="section-title">Daftar Soal</h3>
+                            <div class="section-actions">
+                                <span id="totalQuestionsCount" class="total-count">Total: 3 soal</span>
+                                <button id="clearAllBtn" class="btn btn--outline btn--sm">
+                                    🗑️ Hapus Semua
+                                </button>
+                            </div>
+                        </div>
+                        <div id="questionsTable" class="questions-table">
+                            <!-- Questions akan dirender di sini -->
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Edit Question Modal -->
+                <div id="editModal" class="modal hidden">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h3 class="modal-title">Edit Soal</h3>
+                            <button id="closeEditModalBtn" class="close-btn">&times;</button>
+                        </div>
+                        <div class="modal-body">
+                            <form id="editQuestionForm">
+                                <input type="hidden" id="editQuestionId">
+                                <div class="form-group">
+                                    <label class="form-label" for="editQuestionText">Pertanyaan/Soal *</label>
+                                    <textarea id="editQuestionText" class="form-control" rows="2" required></textarea>
+                                </div>
+                                <div class="form-group">
+                                    <label class="form-label" for="editCorrectAnswer">Jawaban QR yang Benar *</label>
+                                    <input type="text" id="editCorrectAnswer" class="form-control" required>
+                                </div>
+                                <div class="form-group">
+                                    <label class="form-label" for="editQuestionDescription">Deskripsi Tambahan</label>
+                                    <textarea id="editQuestionDescription" class="form-control" rows="2"></textarea>
+                                </div>
+                                <div class="form-group">
+                                    <label class="form-label" for="editQuestionHints">Petunjuk (satu per baris)</label>
+                                    <textarea id="editQuestionHints" class="form-control" rows="3"></textarea>
+                                </div>
+                                <div class="form-group">
+                                    <label class="form-label" for="editQuestionPoints">Poin (1-100)</label>
+                                    <input type="number" id="editQuestionPoints" class="form-control" min="1" max="100">
+                                </div>
+                            </form>
+                        </div>
+                        <div class="modal-footer">
+                            <button id="cancelEditBtn" class="btn btn--outline">Batal</button>
+                            <button id="saveEditBtn" class="btn btn--primary">💾 Simpan Perubahan</button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Delete Confirmation Modal -->
+                <div id="deleteModal" class="modal hidden">
+                    <div class="modal-content modal-content--small">
+                        <div class="modal-header">
+                            <h3 class="modal-title">Konfirmasi Hapus</h3>
+                        </div>
+                        <div class="modal-body">
+                            <p>Apakah Anda yakin ingin menghapus soal ini?</p>
+                            <p id="deleteQuestionPreview" class="question-preview"></p>
+                        </div>
+                        <div class="modal-footer">
+                            <button id="cancelDeleteBtn" class="btn btn--outline">Batal</button>
+                            <button id="confirmDeleteBtn" class="btn btn--error">🗑️ Hapus</button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Clear All Confirmation Modal -->
+                <div id="clearAllModal" class="modal hidden">
+                    <div class="modal-content modal-content--small">
+                        <div class="modal-header">
+                            <h3 class="modal-title">Konfirmasi Hapus Semua</h3>
+                        </div>
+                        <div class="modal-body">
+                            <p><strong>Peringatan!</strong> Ini akan menghapus semua soal dan mengembalikan ke soal default.</p>
+                            <p>Tindakan ini tidak dapat dibatalkan.</p>
+                        </div>
+                        <div class="modal-footer">
+                            <button id="cancelClearAllBtn" class="btn btn--outline">Batal</button>
+                            <button id="confirmClearAllBtn" class="btn btn--error">🗑️ Hapus Semua</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Toast Notifications -->
+        <div id="toastContainer" class="toast-container"></div>
+    </div>
+
+    <script src="app.js"></script>
+</body>
+</html>
