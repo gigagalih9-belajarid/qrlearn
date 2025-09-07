@@ -11,6 +11,7 @@ QR Learn adalah aplikasi berbasis website untuk menunjang pembelajaran berbasis 
 - index.php/  → Struktur utama aplikasi
 - style.css/  → Style user interface aplikasi
 - README.md   → Dokumentasi utama aplikasi
+- LICENSE     → Lisensi Aplikasi
 ```
 
 ---
