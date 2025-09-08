@@ -23,6 +23,11 @@ QR Learn adalah aplikasi berbasis website untuk menunjang pembelajaran berbasis 
 - Lihat Hasil          : halaman untuk mengecek hasil pengerjaan soal, score, dan hasil scan
 
 ---
+## Tampilan Aplikasi
+    ![Tampilan Landing Page / Halaman Awal](https://drive.google.com/file/d/1ooqXa0gmly7d2r0rDDq2OHrl0YAPzBZ7/view?usp=sharing)
+    ![Tampilan Halaman Mulai Belajar](https://drive.google.com/file/d/1McrNjDCfCPuXuuunl97HKxpwopm1KocA/view?usp=sharing)
+    ![Tampilan Halaman Dashboard Admin](https://drive.google.com/file/d/1-X8Ynb3JpB5i_pqY9x8waZPXleeUr-U-/view?usp=sharing)
+    ![Tampilan Halaman Lihat Hasil](https://drive.google.com/file/d/1otTyP06xjCyyuOMdQs_N6OO9D95dNxvo/view?usp=sharing)
 
 ## ⚙️ Instalasi & Penggunaan
 
