@@ -26,7 +26,7 @@ QR Learn adalah aplikasi berbasis website untuk menunjang pembelajaran berbasis 
 ## Tampilan Aplikasi
     ![Tampilan Landing Page / Halaman Awal](https://github.com/gigagalih9-belajarid/qrlearn/blob/main/Halaman%20Landing%20Page%20_%20Halaman%20Awal.png)
     ![Tampilan Halaman Mulai Belajar](https://drive.google.com/file/d/1McrNjDCfCPuXuuunl97HKxpwopm1KocA/view?usp=sharing)
-    ![Tampilan Halaman Dashboard Admin](https://drive.google.com/file/d/1-X8Ynb3JpB5i_pqY9x8waZPXleeUr-U-/view?usp=sharing)
+    ![Tampilan Halaman Dashboard Admin](Halaman Dashboard Admin.png)
     ![Tampilan Halaman Lihat Hasil](https://drive.google.com/file/d/1otTyP06xjCyyuOMdQs_N6OO9D95dNxvo/view?usp=sharing)
 
 ## ⚙️ Instalasi & Penggunaan
